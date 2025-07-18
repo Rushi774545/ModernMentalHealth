@@ -1,0 +1,1030 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7-Day Stress Relief Therapy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        .therapy-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 0;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .therapy-header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon fill="rgba(255,255,255,0.05)" points="0,100 100,0 100,100"/></svg>');
+            background-size: cover;
+        }
+
+        .therapy-header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .day-info {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        .therapy-nav {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-item {
+            margin: 0 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 12px 20px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-width: 150px;
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-item i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .nav-item h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .therapy-content {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 30px;
+            transition: all 0.4s ease;
+        }
+
+        .therapy-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-header {
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .content-header i {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+
+        .content-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .content-body {
+            padding: 30px;
+        }
+
+        /* Video Section */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .video-thumb {
+            height: 160px;
+            overflow: hidden;
+        }
+
+        .video-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .video-card:hover .video-thumb img {
+            transform: scale(1.05);
+        }
+
+        .video-info {
+            padding: 15px;
+        }
+
+        .video-info h4 {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+        }
+
+        .video-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Timer Section */
+        .timer-container {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .timer-display {
+            font-size: 5rem;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            color: #5a67d8;
+            margin: 20px 0;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .timer-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 140px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .timer-btn i {
+            margin-right: 8px;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            color: white;
+        }
+
+        .pause-btn {
+            background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
+            color: white;
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #f44336 0%, #ef5350 100%);
+            color: white;
+        }
+
+        .timer-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .timer-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Success Message */
+        .success-message {
+            background: linear-gradient(135deg, #43a047 0%, #66bb6a 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 30px 0;
+            display: none;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            animation: pulse 2s infinite;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.5); }
+            70% { box-shadow: 0 0 0 15px rgba(76, 175, 80, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+        }
+
+        .success-message h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .success-message h3 i {
+            margin-right: 10px;
+        }
+
+        .success-message p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Goal Section */
+        .goal-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid #5a67d8;
+        }
+
+        .goal-section h3 {
+            color: #5a67d8;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .goal-section h3 i {
+            margin-right: 10px;
+        }
+
+        .progress-container {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 20px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 0;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .goal-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        /* Footer */
+        .action-footer {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .action-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-btn i {
+            margin-right: 10px;
+        }
+
+        .prev-btn {
+            background: linear-gradient(135deg, #6c757d 0%, #adb5bd 100%);
+            color: white;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #5a67d8 0%, #818cf8 100%);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .therapy-nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-item {
+                width: 100%;
+                max-width: 300px;
+                margin: 10px 0;
+            }
+            
+            .timer-display {
+                font-size: 3.5rem;
+            }
+            
+            .timer-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .action-footer {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .action-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Therapy Header -->
+        <header class="therapy-header">
+            <h1>7-Day Stress Relief Therapy</h1>
+            <p class="day-info">Day <span id="current-day">1</span>: <span id="day-title">Introduction to Mindfulness</span></p>
+            
+            <div class="therapy-nav">
+                <div class="nav-item active" data-target="meditation">
+                    <i class="fas fa-spa"></i>
+                    <h3>Meditation</h3>
+                </div>
+                <div class="nav-item" data-target="self-talk">
+                    <i class="fas fa-comment-dots"></i>
+                    <h3>Self-Talk</h3>
+                </div>
+                <div class="nav-item" data-target="hooponopono">
+                    <i class="fas fa-heart"></i>
+                    <h3>Ho'oponopono</h3>
+                </div>
+            </div>
+        </header>
+
+        <!-- Meditation Section -->
+        <section id="meditation" class="therapy-content active">
+            <div class="content-header">
+                <i class="fas fa-spa"></i>
+                <h2>Meditation Practice</h2>
+            </div>
+            
+            <div class="content-body">
+                <p>Begin your meditation journey with these guided practices. Meditation helps calm your mind, reduce stress, and increase focus.</p>
+                
+                <div class="video-container">
+                    <iframe src="{% static 'videos\WhatsApp Video 2025-07-10 at 17.43.20_693aba36.mp4' %}"  title="Meditation Guide" allowfullscreen></iframe>
+                </div>
+                
+                <h3>Recommended Meditation Videos:</h3>
+                <div class="video-grid">
+                    <div class="video-card">
+                        <div class="video-thumb">
+                            <img src="{% static 'images\buddhism-2214532_1280.jpg' %}" alt="Breathing Meditation">
+                        </div>
+                        <div class="video-info">
+                            <h4>Breathing Meditation</h4>
+                            <p><a href="https://youtu.be/VUjiXcfKBn8?si=VcHu0XdkbvqOLXw1" class="link-underline-primary">CLICK HERE</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-thumb">
+                            <img src="{% static 'images\yoga-2176668_1280.jpg' %}" alt="Mindfulness Practice">
+                        </div>
+                        <div class="video-info">
+                            <h4>Mindfulness Practice</h4>
+                            <p><a href="https://youtu.be/bLpChrgS0AY?si=EouuPK4BXy8SI5gP" class="link-underline-primary">CLICK HERE</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-thumb">
+                            <img src="{% static 'images/mindfulness-8125520_1280.jpg' %}" alt="Body Scan Relaxation">
+                        </div>
+                        <div class="video-info">
+                            <h4>Body Scan Relaxation</h4>
+                            <p><a href="https://youtu.be/s35CAoROuFc?si=zWz4zzBmE_NAmLCl" class="link-underline-primary">CLICK HERE</a></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timer-container">
+                    <h3>Meditation Timer</h3>
+                    <p>Set your meditation time and track your progress</p>
+                    
+                    <div class="timer-display" id="meditation-timer">10:00</div>
+                    
+                    <div class="timer-controls">
+                        <button class="timer-btn start-btn" id="meditation-start">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                        <button class="timer-btn pause-btn" id="meditation-pause">
+                            <i class="fas fa-pause"></i> Pause
+                        </button>
+                        <button class="timer-btn reset-btn" id="meditation-reset">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="goal-section">
+                    <h3><i class="fas fa-bullseye"></i> Today's Goal</h3>
+                    <p>Meditate for at least 10 minutes to complete today's meditation practice.</p>
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar" id="meditation-progress"></div>
+                    </div>
+                    <div class="goal-info">
+                        <span>Progress: <span id="progress-text">0%</span></span>
+                        <span>Goal: 10 minutes</span>
+                    </div>
+                </div>
+                
+                <div class="success-message" id="meditation-success">
+                    <h3><i class="fas fa-trophy"></i> Congratulations!</h3>
+                    <p>You've successfully completed your meditation practice for today.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Self-Talk Section -->
+        <section id="self-talk" class="therapy-content">
+            <div class="content-header">
+                <i class="fas fa-comment-dots"></i>
+                <h2>Positive Self-Talk</h2>
+            </div>
+            
+            <div class="content-body">
+                <p>Positive self-talk helps you challenge negative thoughts and build self-confidence. Practice these techniques to improve your mindset.</p>
+                
+                <div class="video-container">
+                    <iframe src="{% static 'videos\WhatsApp Video 2025-07-10 at 16.08.01_49881620.mp4' %}" title="Self-Talk Guide" allowfullscreen></iframe>
+                </div>
+                                <h3>Recommended Meditation Videos:</h3>
+                <div class="video-grid">
+                    <div class="video-card">
+                        <div class="video-thumb">
+                            <img src="{% static 'images\4643681.jpg' %}" alt="Breathing Meditation">
+                        </div>
+                        <div class="video-info">
+                            <h4>Powerful Positive Affirmations</h4>
+                            <p><a href="https://youtu.be/efZFARmGyMs?si=yiTeSoCTGeqOtV16" class="link-underline-primary">CLICK HERE</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-thumb">
+                            <img src="{% static 'images\8676729.jpg' %}" alt="Mindfulness Practice">
+                        </div>
+                        <div class="video-info">
+                            <h4>Morning Powerful Self talk</h4>
+                            <p><a href="https://youtu.be/uT6ASPy2Dbs?si=gzLccuT9kZdDlR1F" class="link-underline-primary">CLICK HERE</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-thumb">
+                            <img src="{% static 'images\17888008.jpg' %}"alt="Body Scan Relaxation">
+                        </div>
+                        <div class="video-info">
+                            <h4>Self Talk You Need</h4>
+                            <p><a href="https://youtu.be/rfSQYk2nWC4?si=hTKlvt5l5t3hCo5F" class="link-underline-primary">CLICK HERE</a></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timer-container">
+                    <h3>Self-Talk Practice Timer</h3>
+                    <p>Set your practice time and focus on positive affirmations</p>
+                    
+                    <div class="timer-display" id="self-talk-timer">05:00</div>
+                    
+                    <div class="timer-controls">
+                        <button class="timer-btn start-btn" id="self-talk-start">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                        <button class="timer-btn pause-btn" id="self-talk-pause">
+                            <i class="fas fa-pause"></i> Pause
+                        </button>
+                        <button class="timer-btn reset-btn" id="self-talk-reset">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="goal-section">
+                    <h3><i class="fas fa-bullseye"></i> Today's Goal</h3>
+                    <p>Practice positive self-talk for at least 5 minutes to complete today's session.</p>
+                    <p>Here are some sample question that you can use for self talk.</p>
+<p>"I am enough, just as I am."</p>
+
+<p>"I choose peace over worry."</p>
+
+<p>"Every challenge helps me grow stronger."</p>
+
+<p>"I trust myself and my journey."</p>
+
+<p>"I release what no longer serves me."</p>
+
+<p>"I am worthy of love and happiness."</p>
+
+<p>"I embrace change with an open heart."</p>
+
+<p>"I forgive myself for past mistakes."</p>
+
+<p>"I attract positivity and abundance."</p>
+
+<p>"I am in control of my thoughts and emotions."</p>
+                    
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar" id="self-talk-progress"></div>
+                    </div>
+                    <div class="goal-info">
+                        <span>Progress: <span id="self-talk-progress-text">0%</span></span>
+                        <span>Goal: 5 minutes</span>
+                    </div>
+                </div>
+                
+                <div class="success-message" id="self-talk-success">
+                    <h3><i class="fas fa-trophy"></i> Well Done!</h3>
+                    <p>You've successfully completed your self-talk practice for today.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ho'oponopono Section -->
+        <section id="hooponopono" class="therapy-content">
+            <div class="content-header">
+                <i class="fas fa-heart"></i>
+                <h2>Ho'oponopono Practice</h2>
+            </div>
+            
+            <div class="content-body">
+                <p>Ho'oponopono is an ancient Hawaiian practice of reconciliation and forgiveness. Use this powerful technique to release emotional burdens.</p>
+                
+                <div class="video-container">
+                    <iframe src="{% static 'videos\WhatsApp Video 2025-07-10 at 16.08.18_a7bee556.mp4' %}" title="Ho'oponopono Guide" allowfullscreen></iframe>
+                </div>
+                            
+                
+                <div class="timer-container">
+                    <h3>Ho'oponopono Practice Timer</h3>
+                    <p>Set your practice time and focus on forgiveness</p>
+                    
+                    <div class="timer-display" id="hooponopono-timer">07:00</div>
+                    
+                    <div class="timer-controls">
+                        <button class="timer-btn start-btn" id="hooponopono-start">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                        <button class="timer-btn pause-btn" id="hooponopono-pause">
+                            <i class="fas fa-pause"></i> Pause
+                        </button>
+                        <button class="timer-btn reset-btn" id="hooponopono-reset">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="goal-section">
+                    <h3><i class="fas fa-bullseye"></i> Today's Goal</h3>
+                    <p>Practice Ho'oponopono for at least 7 minutes to complete today's session.</p>
+                    <p>Here are some sample question that you can use for Ho'oponopono.</p>
+<p>"I'm sorry, please forgive me, thank you, I love you." </p>
+
+<p>"I release all negative energy and ask for healing."</p>
+
+<p>"I forgive myself and others with love."</p>
+
+<p>"I cleanse my mind and heart of all pain."</p>
+
+<p>"Divine, please correct any errors within me."</p>
+
+<p>"I let go of resentment and embrace peace."</p>
+
+<p>"Thank you for healing my thoughts and memories."</p>
+
+<p>"I take responsibility and choose love over fear."</p>
+
+<p>"I am open to divine cleansing and renewal."</p>
+
+<p>"Love flows through me, healing all wounds."</p>
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar" id="hooponopono-progress"></div>
+                    </div>
+                    <div class="goal-info">
+                        <span>Progress: <span id="hooponopono-progress-text">0%</span></span>
+                        <span>Goal: 7 minutes</span>
+                    </div>
+                </div>
+                
+                <div class="success-message" id="hooponopono-success">
+                    <h3><i class="fas fa-trophy"></i> Excellent!</h3>
+                    <p>You've successfully completed your Ho'oponopono practice for today.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer Navigation -->
+        <div class="action-footer">
+            <button class="action-btn prev-btn" id="prev-day">
+                <i class="fas fa-arrow-left"></i> Previous Day
+            </button>
+            <button class="action-btn next-btn" id="next-day">
+                Next Day <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Day progression system
+        let currentDay = 1;
+        const dayTitles = {
+            1: "Introduction to Mindfulness",
+            2: "Deep Breathing & Affirmations",
+            3: "Body Scan & Self-Compassion",
+            4: "Loving-Kindness Meditation",
+            5: "Gratitude Practice",
+            6: "Stress Release Techniques",
+            7: "Integration & Reflection"
+        };
+        
+        const dayGoals = {
+            meditation: [10, 15, 20, 15, 20, 20, 25],
+            selfTalk: [5, 10, 10, 10, 15, 10, 10],
+            hooponopono: [0, 7, 0, 10, 10, 0, 15]
+        };
+        
+        // Update day information
+        function updateDayInfo() {
+            document.getElementById('current-day').textContent = currentDay;
+            document.getElementById('day-title').textContent = dayTitles[currentDay];
+            
+            // Update timers and goals
+            document.getElementById('meditation-timer').textContent = 
+                formatTime(dayGoals.meditation[currentDay - 1] * 60);
+                
+            document.getElementById('self-talk-timer').textContent = 
+                formatTime(dayGoals.selfTalk[currentDay - 1] * 60);
+                
+            document.getElementById('hooponopono-timer').textContent = 
+                formatTime(dayGoals.hooponopono[currentDay - 1] * 60);
+            
+            // Update goal text
+            document.querySelectorAll('#meditation .goal-section p')[0].textContent = 
+                `Meditate for at least ${dayGoals.meditation[currentDay - 1]} minutes to complete today's meditation practice.`;
+                
+            document.querySelectorAll('#self-talk .goal-section p')[0].textContent = 
+                `Practice positive self-talk for at least ${dayGoals.selfTalk[currentDay - 1]} minutes to complete today's session.`;
+                
+            document.querySelectorAll('#hooponopono .goal-section p')[0].textContent = 
+                `Practice Ho'oponopono for at least ${dayGoals.hooponopono[currentDay - 1]} minutes to complete today's session.`;
+            
+            // Update button states
+            document.getElementById('prev-day').disabled = currentDay === 1;
+            document.getElementById('next-day').disabled = currentDay === 7;
+            
+            // Reset all timers and progress
+            resetAllTimers();
+        }
+        
+        // Format time as MM:SS
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+        
+        // Reset all timers and progress
+        function resetAllTimers() {
+            // Reset meditation timer
+            meditationTimeLeft = dayGoals.meditation[currentDay - 1] * 60;
+            document.getElementById('meditation-timer').textContent = 
+                formatTime(meditationTimeLeft);
+            meditationProgress.style.width = '0%';
+            document.getElementById('progress-text').textContent = '0%';
+            document.getElementById('meditation-success').classList.remove('show');
+            
+            // Reset self-talk timer
+            selfTalkTimeLeft = dayGoals.selfTalk[currentDay - 1] * 60;
+            document.getElementById('self-talk-timer').textContent = 
+                formatTime(selfTalkTimeLeft);
+            selfTalkProgress.style.width = '0%';
+            document.getElementById('self-talk-progress-text').textContent = '0%';
+            document.getElementById('self-talk-success').classList.remove('show');
+            
+            // Reset Ho'oponopono timer
+            hooponoponoTimeLeft = dayGoals.hooponopono[currentDay - 1] * 60;
+            document.getElementById('hooponopono-timer').textContent = 
+                formatTime(hooponoponoTimeLeft);
+            hooponoponoProgress.style.width = '0%';
+            document.getElementById('hooponopono-progress-text').textContent = '0%';
+            document.getElementById('hooponopono-success').classList.remove('show');
+        }
+        
+        // Navigation between techniques
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active class from all nav items
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                
+                // Add active class to clicked nav item
+                this.classList.add('active');
+                
+                // Hide all content sections
+                document.querySelectorAll('.therapy-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show selected content section
+                const target = this.getAttribute('data-target');
+                document.getElementById(target).classList.add('active');
+            });
+        });
+        
+        // Timer functionality for Meditation
+        let meditationTimer;
+        let meditationTimeLeft = 10 * 60; // 10 minutes in seconds
+        const meditationTimerDisplay = document.getElementById('meditation-timer');
+        const meditationProgress = document.getElementById('meditation-progress');
+        const progressText = document.getElementById('progress-text');
+        
+        function updateMeditationTimer() {
+            meditationTimerDisplay.textContent = formatTime(meditationTimeLeft);
+            
+            // Update progress bar
+            const totalTime = dayGoals.meditation[currentDay - 1] * 60;
+            const progressPercent = ((totalTime - meditationTimeLeft) / totalTime) * 100;
+            meditationProgress.style.width = `${progressPercent}%`;
+            progressText.textContent = `${Math.round(progressPercent)}%`;
+            
+            // Check if meditation is complete
+            if (meditationTimeLeft <= 0) {
+                clearInterval(meditationTimer);
+                document.getElementById('meditation-success').classList.add('show');
+                
+                // Play success sound
+                const audio = new Audio("{% static 'audio\success-340660.mp3' %}");
+                audio.play();
+            }
+            
+            meditationTimeLeft--;
+        }
+        
+        document.getElementById('meditation-start').addEventListener('click', function() {
+            clearInterval(meditationTimer);
+            meditationTimer = setInterval(updateMeditationTimer, 1000);
+        });
+        
+        document.getElementById('meditation-pause').addEventListener('click', function() {
+            clearInterval(meditationTimer);
+        });
+        
+        document.getElementById('meditation-reset').addEventListener('click', function() {
+            clearInterval(meditationTimer);
+            meditationTimeLeft = dayGoals.meditation[currentDay - 1] * 60;
+            meditationTimerDisplay.textContent = formatTime(meditationTimeLeft);
+            meditationProgress.style.width = '0%';
+            progressText.textContent = '0%';
+            document.getElementById('meditation-success').classList.remove('show');
+        });
+        
+        // Timer functionality for Self-Talk
+        let selfTalkTimer;
+        let selfTalkTimeLeft = 5 * 60; // 5 minutes in seconds
+        const selfTalkTimerDisplay = document.getElementById('self-talk-timer');
+        const selfTalkProgress = document.getElementById('self-talk-progress');
+        const selfTalkProgressText = document.getElementById('self-talk-progress-text');
+        
+        function updateSelfTalkTimer() {
+            selfTalkTimerDisplay.textContent = formatTime(selfTalkTimeLeft);
+            
+            // Update progress bar
+            const totalTime = dayGoals.selfTalk[currentDay - 1] * 60;
+            const progressPercent = ((totalTime - selfTalkTimeLeft) / totalTime) * 100;
+            selfTalkProgress.style.width = `${progressPercent}%`;
+            selfTalkProgressText.textContent = `${Math.round(progressPercent)}%`;
+            
+            // Check if self-talk is complete
+            if (selfTalkTimeLeft <= 0) {
+                clearInterval(selfTalkTimer);
+                document.getElementById('self-talk-success').classList.add('show');
+                
+                // Play success sound
+                const audio = new Audio("{% static 'audio\success-340660.mp3' %}");
+                audio.play();
+            }
+            
+            selfTalkTimeLeft--;
+        }
+        
+        document.getElementById('self-talk-start').addEventListener('click', function() {
+            clearInterval(selfTalkTimer);
+            selfTalkTimer = setInterval(updateSelfTalkTimer, 1000);
+        });
+        
+        document.getElementById('self-talk-pause').addEventListener('click', function() {
+            clearInterval(selfTalkTimer);
+        });
+        
+        document.getElementById('self-talk-reset').addEventListener('click', function() {
+            clearInterval(selfTalkTimer);
+            selfTalkTimeLeft = dayGoals.selfTalk[currentDay - 1] * 60;
+            selfTalkTimerDisplay.textContent = formatTime(selfTalkTimeLeft);
+            selfTalkProgress.style.width = '0%';
+            selfTalkProgressText.textContent = '0%';
+            document.getElementById('self-talk-success').classList.remove('show');
+        });
+        
+        // Timer functionality for Ho'oponopono
+        let hooponoponoTimer;
+        let hooponoponoTimeLeft = 7 * 60; // 7 minutes in seconds
+        const hooponoponoTimerDisplay = document.getElementById('hooponopono-timer');
+        const hooponoponoProgress = document.getElementById('hooponopono-progress');
+        const hooponoponoProgressText = document.getElementById('hooponopono-progress-text');
+        
+        function updateHooponoponoTimer() {
+            hooponoponoTimerDisplay.textContent = formatTime(hooponoponoTimeLeft);
+            
+            // Update progress bar
+            const totalTime = dayGoals.hooponopono[currentDay - 1] * 60;
+            const progressPercent = ((totalTime - hooponoponoTimeLeft) / totalTime) * 100;
+            hooponoponoProgress.style.width = `${progressPercent}%`;
+            hooponoponoProgressText.textContent = `${Math.round(progressPercent)}%`;
+            
+            // Check if Ho'oponopono is complete
+            if (hooponoponoTimeLeft <= 0) {
+                clearInterval(hooponoponoTimer);
+                document.getElementById('hooponopono-success').classList.add('show');
+                
+                // Play success sound
+                const audio = new Audio("{% static 'audio\success-340660.mp3' %}");
+                audio.play();
+            }
+            
+            hooponoponoTimeLeft--;
+        }
+        
+        document.getElementById('hooponopono-start').addEventListener('click', function() {
+            clearInterval(hooponoponoTimer);
+            hooponoponoTimer = setInterval(updateHooponoponoTimer, 1000);
+        });
+        
+        document.getElementById('hooponopono-pause').addEventListener('click', function() {
+            clearInterval(hooponoponoTimer);
+        });
+        
+        document.getElementById('hooponopono-reset').addEventListener('click', function() {
+            clearInterval(hooponoponoTimer);
+            hooponoponoTimeLeft = dayGoals.hooponopono[currentDay - 1] * 60;
+            hooponoponoTimerDisplay.textContent = formatTime(hooponoponoTimeLeft);
+            hooponoponoProgress.style.width = '0%';
+            hooponoponoProgressText.textContent = '0%';
+            document.getElementById('hooponopono-success').classList.remove('show');
+        });
+        
+        // Day navigation
+        document.getElementById('prev-day').addEventListener('click', function() {
+            if (currentDay > 1) {
+                currentDay--;
+                updateDayInfo();
+            }
+        });
+        
+        document.getElementById('next-day').addEventListener('click', function() {
+            if (currentDay < 7) {
+                currentDay++;
+                updateDayInfo();
+            }
+        });
+        
+        // Initialize page
+        updateDayInfo();
+    </script>
+</body>
+</html>

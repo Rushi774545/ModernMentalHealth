@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="container text-center py-5">
+        <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 mb-3">
+            Peace for the Mind, Body, and Soul
+        </span>
+        <h1 class="display-4 fw-bold mb-4" style="color:rgb(27, 112, 52);">Self care and Mental health</h1>
+        <p class="lead mx-auto" style="max-width: 600px;">
+            Your mental well-being is our priority. Discover personalized support for your journey to better mental health.
+        </p>
+    </div>
+    </section>
+    <div class="row mt-5 pt-5">
+    <div class="col-md-4 text-center">
+        <img src="{% static 'images\Young man practicing yoga exercises for mental and body health.jpg' %}" alt="Therapy" width="200" class="mb-3">
+        <h4>Professional Support</h4>
+        <p class="text-muted">Connect with licensed mental health professionals</p>
+    </div>
+    <div class="col-md-4 text-center">
+        <img src="{% static 'images\7056721.jpg' %}" alt="Community" width="200" class="mb-3">
+        <h4>Support Community</h4>
+        <p class="text-muted">Join others on similar mental health journeys</p>
+    </div>
+    <div class="col-md-4 text-center">
+        <img src="{% static 'images\Wavy_Ppl-11_Single-01.jpg' %}" alt="Resources" width="200" class="mb-3">
+        <h4>Helpful Resources</h4>
+        <p class="text-muted">Access tools and guides for self-care</p>
+    </div>
+</div>
+
+{% endblock %}

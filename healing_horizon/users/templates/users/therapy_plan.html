@@ -1,0 +1,308 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="therapy-plan-container">
+    <!-- Hero Section with Background Image -->
+    <div class="therapy-hero text-center py-5" style="background-image:url('{% static "images\6079758.jpg" %}')">
+        <div class="container position-relative">
+            <div class="hero-content">
+                <h1 class="display-4 text-white mb-3">7-Day Stress Relief Therapy</h1>
+                <p class="lead text-light mb-4">A guided journey to reduce stress and increase inner peace</p>
+                <div class="therapy-badges my-4">
+                    <span class="badge badge-pill badge-primary mr-2"><i class="fas fa-spa"></i> Meditation</span>
+                    <span class="badge badge-pill badge-success mr-2"><i class="fas fa-comment-dots"></i> Self-Talk</span>
+                    <span class="badge badge-pill badge-warning"><i class="fas fa-heart"></i> Ho'oponopono</span>
+                </div>
+                <a href="#therapy-days" class="btn btn-light btn-lg mt-3 pulse-animation">
+                    <i class="fas fa-play mr-2"></i> Start Your Journey
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Introduction Section -->
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <img src="{% static 'images\4258076.jpg' %}" 
+                     class="img-fluid rounded-lg shadow" 
+                     alt="Woman meditating">
+            </div>
+            <div class="col-lg-6">
+                <h2 class="mb-4">Your Path to Inner Peace</h2>
+                <p class="lead">This carefully designed 7-day program combines ancient wisdom with modern psychology to help you reduce stress and find balance.</p>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="mr-3 text-primary">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">Daily Guided Practices</h5>
+                        <p class="text-muted mb-0">10-25 minute sessions tailored for each day</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="mr-3 text-primary">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">Progressive Structure</h5>
+                        <p class="text-muted mb-0">Build skills gradually over the week</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="mr-3 text-primary">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">Science-Based Techniques</h5>
+                        <p class="text-muted mb-0">Methods proven to reduce stress and anxiety</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Therapy Days Section -->
+    <div id="therapy-days" class="container-fluid py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2>Your 7-Day Healing Journey</h2>
+                <p class="lead">Click on any day to begin your practice</p>
+            </div>
+            <div class="row">
+                {% for day in days %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card therapy-card h-100 border-0 shadow-sm hover-lift">
+                        <div class="card-img-top position-relative">
+    <img src="{% static 'images/' %}{{ day.image }}" 
+         class="img-fluid w-100" 
+         alt="Day {{ day.day }} - {{ day.title }}">
+    <div class="day-number">{{ day.day }}</div>
+</div>
+                        <div class="card-body">
+                            <h4 class="card-title">{{ day.title }}</h4>
+                            <p class="card-text text-muted">{{ day.description }}</p>
+                            <hr>
+                            <h6 class="d-flex align-items-center">
+                                <i class="fas fa-tasks mr-2 text-primary"></i>Today's Techniques:
+                            </h6>
+                            <ul class="list-unstyled">
+                                {% for technique in day.techniques %}
+                                <li class="mb-2 d-flex align-items-center">
+                                    <i class="{{ technique.icon }} mr-2 text-muted"></i>
+                                    <span><strong>{{ technique.name }}</strong> - {{ technique.duration }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                         
+           
+       
+                        <div class="card-footer bg-white border-0">
+                       <a href="{% url day.start_url day.day_param %}" class="btn btn-start-day w-100">
+                Start Now <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+                            <button class="btn btn-start-day w-100" data-day="{{ day.day }}">
+                                Begin Day {{ day.day }} <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonial Section -->
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="text-center mb-5">
+                    <h2>Success Stories</h2>
+                    <p class="lead">What our participants say about their experience</p>
+                </div>
+                <div class="testimonial-slider">
+                    <div class="testimonial-item p-4 bg-white rounded-lg shadow-sm">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" 
+                                 class="rounded-circle mr-3" width="60" alt="Sarah">
+                            <div>
+                                <h5 class="mb-0">Sarah Johnson</h5>
+                                <p class="text-muted small mb-0">Completed the 7-day program</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-text">
+                            <p>"The Ho'oponopono technique on Day 4 was transformative. I've never experienced such emotional release. This program changed how I handle stress completely."</p>
+                            <div class="text-primary">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final CTA Section -->
+    <div class="therapy-cta py-5 text-center"  style="background-image:url('{% static "images\6079758.jpg" %}')">
+        <div class="container">
+            <h2 class="text-white mb-4">Ready to Transform Your Stress?</h2>
+            <p class="lead text-light mb-4">Begin your journey to peace today</p>
+            <a href="#therapy-days" class="btn btn-light btn-lg mr-3">
+                <i class="fas fa-play mr-2"></i> Start Now
+            </a>
+            <button class="btn btn-outline-light btn-lg">
+                <i class="fas fa-calendar-alt mr-2"></i> Remind Me
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .therapy-plan-container {
+        overflow-x: hidden;
+    }
+    
+  .therapy-hero {
+        background-image: url('{% static "images\7751672.jpg" %}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100px;
+        position: relative;
+        width: 100%;
+    }
+    
+    .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .therapy-badges .badge {
+        font-size: 1rem;
+        padding: 10px 20px;
+        font-weight: normal;
+    }
+    
+    .therapy-card {
+        transition: all 0.3s ease;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    
+    .hover-lift:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+    
+    .day-number {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .card-img-top {
+        height: 200px;
+        overflow: hidden;
+    }
+    
+    .card-img-top img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.5s ease;
+    }
+    
+    .therapy-card:hover .card-img-top img {
+        transform: scale(1.05);
+    }
+    
+    .btn-start-day {
+        background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 10px 20px;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+    
+    .btn-start-day:hover {
+        background: linear-gradient(135deg, #5649c0 0%, #8981e0 100%);
+        transform: translateY(-2px);
+    }
+    
+    .therapy-cta {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px 20px 0 0;
+    }
+    
+    .testimonial-item {
+        padding: 30px;
+        transition: all 0.3s;
+    }
+    
+    .testimonial-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .pulse-animation {
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+    
+    @media (max-width: 768px) {
+        .therapy-hero {
+            padding: 80px 0;
+        }
+        
+        .therapy-hero h1 {
+            font-size: 2.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Smooth scroll for anchor links
+    $('a[href^="#"]').on('click', function(event) {
+        event.preventDefault();
+        $('html, body').animate({
+            scrollTop: $($(this).attr('href')).offset().top - 80
+        }, 800);
+    });
+    
+    // Day button click handler
+    $('.btn-start-day').click(function() {
+        const day = $(this).data('day');
+        alert(`Starting Day ${day} therapy session. In a real implementation, this would launch the specific exercises.`);
+    });
+});
+</script>
+{% endblock %}

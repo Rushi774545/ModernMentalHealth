@@ -1,0 +1,31 @@
+/* Stress level colors */
+.bg-orange {
+    background-color: #fd7e14;
+}
+
+/* Assessment card */
+.assessment-card {
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.assessment-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Answer buttons */
+.btn-group-toggle .btn {
+    transition: all 0.2s;
+}
+
+/* Result animation */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.result-circle {
+    animation: pulse 2s infinite;
+}

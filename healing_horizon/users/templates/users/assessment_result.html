@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-{{ result.get_level_class }} text-white">
+                    <h3 class="mb-0">Assessment Results</h3>
+                </div>
+                <div class="card-body text-center">
+                    <div class="result-circle mx-auto mb-4" 
+                         style="background: {{ result.get_level_color }};
+                                width: 200px; height: 200px;
+                                border-radius: 50%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;">
+                        <h2 class="text-white">{{ result.get_level_display }}</h2>
+                    </div>
+                    
+                    <h4 class="mt-4">Your Stress Level: {{ result.score|floatformat:0 }}%</h4>
+                    
+                    <div class="progress mt-3 mb-4" style="height: 30px;">
+                        <div class="progress-bar bg-{{ result.get_level_class }}" 
+                             role="progressbar" 
+                             style="width: {{ result.score }}%"
+                             aria-valuenow="{{ result.score }}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-{{ result.get_level_class }}">
+                        <h5>Interpretation:</h5>
+                        <p>{{ result.get_interpretation }}</p>
+                    </div>
+                    
+                    <div class="mt-4">
+                        {% if result.score >= 40 %}
+                            <!-- Options for high stress level (≥40%) -->
+                              <a href="{% url 'therapy_plan' %}" class="btn btn-success mr-2">Take Therapy</a>
+                            <a href="{% url 'expert_list' %}" class="btn btn-primary mr-2">Talk to Experts</a>
+                            <a href="{% url 'voice_assistant' %}" class="btn btn-info">AI Voice Assistant</a>
+                        {% else %}
+                            <!-- Options for lower stress level (<40%) -->
+                            <a href="{% url 'therapy_plan' %}" class="btn btn-success mr-2">Take Therapy</a>
+                            <a href="{% url 'expert_list' %}" class="btn btn-primary mr-2">Talk to Experts</a>
+                            <a href="{% url 'voice_assistant' %}" class="btn btn-info">AI Voice Assistant</a>
+                        {% endif %}
+                        <a href="{% url 'dashboard' %}" class="btn btn-secondary mt-2">Return to Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn {
+        margin: 5px;
+        min-width: 150px;
+    }
+    @media (max-width: 576px) {
+        .btn {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+        }
+    }
+</style>
+{% endblock %}

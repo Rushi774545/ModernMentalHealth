@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-success text-white" >
+                    <h3 class="mb-0">Mental Health Assessment</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <p class="lead mb-4">For each question, select how often you've felt this way in the past 2 weeks:</p>
+                        
+                        <div class="list-group mb-4">
+                            {% for question in questions %}
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5>{{ question.display_order }}. {{ question.text }}</h5>
+                                    {% if question.category %}
+                                    <span class="badge bg-secondary">{{ question.category }}</span>
+                                    {% endif %}
+                                </div>
+                                <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+                                    {% for option in question.options.all %}
+                                    <label class="btn btn-outline-secondary">
+                                        <input type="radio" name="q_{{ question.id }}" 
+                                               value="{{ option.value }}" 
+                                               {% if forloop.first %}required{% endif %}> 
+                                        {{ option.text }}
+                                    </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg py-3" style="background-color: green;">
+                                Submit Assessment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom styling for radio buttons */
+    .btn-group-toggle .btn {
+        transition: all 0.3s ease;
+    }
+    .btn-group-toggle .btn:hover {
+        transform: translateY(-2px);
+    }
+    .btn-group-toggle .active {
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+</style>
+
+<script>
+// Enhanced interactive effects
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.btn-group-toggle label').forEach(label => {
+        label.addEventListener('click', function() {
+            // Remove active class from all buttons in this group
+            const parentGroup = this.closest('.btn-group-toggle');
+            parentGroup.querySelectorAll('label').forEach(sib => {
+                sib.classList.remove('active', 'btn-primary');
+                sib.classList.add('btn-outline-secondary');
+            });
+            
+            // Add active class to clicked button
+            this.classList.add('active', 'btn-primary');
+            this.classList.remove('btn-outline-secondary');
+            
+            // Ensure the radio input is checked
+            const radioInput = this.querySelector('input[type="radio"]');
+            if (radioInput) {
+                radioInput.checked = true;
+            }
+        });
+        
+        // Initialize checked state on page load
+        const radioInput = label.querySelector('input[type="radio"]');
+        if (radioInput && radioInput.checked) {
+            label.classList.add('active', 'btn-primary');
+            label.classList.remove('btn-outline-secondary');
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Find Mental Health Experts</h3>
+                </div>
+                
+                <div class="card-body">
+                    <!-- Search Filters -->
+                    <form method="get" class="mb-4">
+                        <div class="row">
+                            <div class="col-md-5 mb-2">
+                                <input type="text" name="location" class="form-control" 
+                                       placeholder="Search by location" value="{{ location }}">
+                            </div>
+                            <div class="col-md-5 mb-2">
+                                <select name="type" class="form-select">
+                                    <option value="">All Specialties</option>
+                                    <option value="PSY" {% if selected_type == 'PSY' %}selected{% endif %}>Psychiatrist</option>
+                                    <option value="COU" {% if selected_type == 'COU' %}selected{% endif %}>Counselor</option>
+                                    <option value="LCSW" {% if selected_type == 'LCSW' %}selected{% endif %}>Clinical Social Worker</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <button type="submit" class="btn btn-success w-100">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <!-- Experts List -->
+                    {% if experts %}
+                    <div class="row">
+                        {% for expert in experts %}
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="row g-0">
+                                    <div class="col-md-4">
+                                        {% if expert.profile_picture %}
+                                        <img src="{{ expert.profile_picture.url }}" 
+                                             class="img-fluid rounded-start h-100 w-100" 
+                                             alt="{{ expert.user.get_full_name }}"
+                                             style="object-fit: cover;">
+                                        {% else %}
+                                        <div class="bg-light d-flex align-items-center justify-content-center h-100">
+                                            <i class="fas fa-user-md fa-3x text-secondary"></i>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ expert.user.get_full_name }}</h5>
+                                            <p class="text-primary mb-1">
+                                                <strong>{{ expert.get_expert_type_display }}</strong>
+                                            </p>
+                                            <p class="text-secondary mb-1">
+                                                <i class="fas fa-map-marker-alt me-1"></i> 
+                                                {{ expert.location }}
+                                            </p>
+                                            <p class="text-secondary mb-1">
+                                                <i class="fas fa-graduation-cap me-1"></i> 
+                                                {{ expert.qualifications }}
+                                            </p>
+                                            <p class="text-secondary mb-1">
+                                                <i class="fas fa-language me-1"></i> 
+                                                {{ expert.languages }}
+                                            </p>
+                                            <p class="text-secondary mb-2">
+                                                <i class="fas fa-briefcase me-1"></i> 
+                                                {{ expert.experience_years }} years experience
+                                            </p>
+                                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                                <span class="badge bg-success fs-6">
+                                                    ${{ expert.consultation_fee }}/session
+                                                </span>
+                                                <a href="#" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-calendar-check me-1"></i> Book Session
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info text-center">
+                        <h5>No experts found matching your criteria</h5>
+                        <p>Try adjusting your search filters</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+</style>
+{% endblock %}

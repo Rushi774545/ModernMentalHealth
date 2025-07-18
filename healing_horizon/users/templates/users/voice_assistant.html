@@ -1,0 +1,279 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0">AI Voice Assistant</h3>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="assistant-avatar mb-3">
+                            <i class="fas fa-robot fa-4x text-primary"></i>
+                        </div>
+                        <div class="language-toggle btn-group mb-3">
+                            <button class="btn btn-primary active" data-lang="english">English</button>
+                            <button class="btn btn-warning" data-lang="hindi">हिंदी</button>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-container mb-4">
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="message assistant-message">
+                                <div class="message-bubble">
+                                    {% if request.session.assistant_lang == 'hindi' %}
+                                    नमस्ते! मैं आपकी मानसिक स्वास्थ्य सहायक हूँ। आप कैसा महसूस कर रहे हैं?
+                                    {% else %}
+                                    Hello! I'm your mental health assistant. How are you feeling today?
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="user-input" 
+                               placeholder="{% if request.session.assistant_lang == 'hindi' %}अपना संदेश लिखें...{% else %}Type your message...{% endif %}">
+                        <button class="btn btn-primary" id="send-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="voice-controls mt-3 text-center">
+                        <button class="btn btn-success btn-lg rounded-circle" id="mic-btn">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <button class="btn btn-secondary ml-2" id="stop-btn" disabled>
+                            <i class="fas fa-stop"></i> Stop
+                        </button>
+                    </div>
+                    
+                    <audio id="response-audio" controls class="w-100 mt-3" style="display:none;"></audio>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .chat-container {
+        height: 300px;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+    
+    .message {
+        margin-bottom: 15px;
+        display: flex;
+    }
+    
+    .user-message {
+        justify-content: flex-end;
+    }
+    
+    .assistant-message {
+        justify-content: flex-start;
+    }
+    
+    .message-bubble {
+        max-width: 70%;
+        padding: 10px 15px;
+        border-radius: 18px;
+    }
+    
+    .user-message .message-bubble {
+        background-color: #d1ecf1;
+        border-bottom-right-radius: 0;
+    }
+    
+    .assistant-message .message-bubble {
+        background-color: #e2e3e5;
+        border-bottom-left-radius: 0;
+    }
+    
+    #mic-btn {
+        width: 70px;
+        height: 70px;
+    }
+</style>
+
+<script>
+// Check if browser supports speech recognition
+if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    alert('Speech recognition is not supported in your browser. Try Chrome or Edge.');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const micBtn = document.getElementById('mic-btn');
+    const stopBtn = document.getElementById('stop-btn');
+    const sendBtn = document.getElementById('send-btn');
+    const userInput = document.getElementById('user-input');
+    const chatMessages = document.getElementById('chat-messages');
+    const audioPlayer = document.getElementById('response-audio');
+    const langButtons = document.querySelectorAll('.language-toggle button');
+    
+    let recognition;
+    let currentLanguage = 'english';
+    let isListening = false;
+    
+    // Initialize speech recognition
+    function initSpeechRecognition() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            
+            recognition.onstart = function() {
+                isListening = true;
+                micBtn.classList.add('btn-danger');
+                micBtn.classList.remove('btn-success');
+                stopBtn.disabled = false;
+                userInput.placeholder = "Listening...";
+            };
+            
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                userInput.value = transcript;
+                sendMessage();
+            };
+            
+            recognition.onerror = function(event) {
+                console.error('Speech recognition error', event.error);
+                addMessage("Sorry, I didn't catch that. Please try again.", 'assistant');
+                resetMicButton();
+            };
+            
+            recognition.onend = function() {
+                if (isListening) {
+                    recognition.start(); // Continue listening
+                } else {
+                    resetMicButton();
+                }
+            };
+        }
+    }
+    
+    function resetMicButton() {
+        isListening = false;
+        micBtn.classList.remove('btn-danger');
+        micBtn.classList.add('btn-success');
+        stopBtn.disabled = true;
+        userInput.placeholder = currentLanguage === 'hindi' ? 
+            'अपना संदेश लिखें...' : 'Type your message...';
+    }
+    
+    // Add message to chat
+    function addMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}-message`;
+        
+        const bubbleDiv = document.createElement('div');
+        bubbleDiv.className = 'message-bubble';
+        bubbleDiv.textContent = text;
+        
+        messageDiv.appendChild(bubbleDiv);
+        chatMessages.appendChild(messageDiv);
+        
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    // Send message to server
+    function sendMessage() {
+        const message = userInput.value.trim();
+        if (!message) return;
+        
+        addMessage(message, 'user');
+        userInput.value = '';
+        
+        fetch('{% url "assistant_chat" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                message: message,
+                language: currentLanguage
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            addMessage(data.response, 'assistant');
+            
+            // Generate and play speech
+            return fetch('{% url "generate_speech" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    text: data.response,
+                    language: currentLanguage
+                })
+            });
+        })
+        .then(response => response.json())
+        .then(data => {
+            audioPlayer.src = data.audio_url;
+            audioPlayer.style.display = 'block';
+            audioPlayer.play();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            addMessage("Sorry, I'm having trouble responding. Please try again.", 'assistant');
+        });
+    }
+    
+    // Event listeners
+    micBtn.addEventListener('click', function() {
+        if (!recognition) {
+            initSpeechRecognition();
+        }
+        
+        if (isListening) {
+            isListening = false;
+            recognition.stop();
+        } else {
+            recognition.lang = currentLanguage === 'english' ? 'en-US' : 'hi-IN';
+            recognition.start();
+        }
+    });
+    
+    stopBtn.addEventListener('click', function() {
+        if (recognition && isListening) {
+            isListening = false;
+            recognition.stop();
+        }
+    });
+    
+    sendBtn.addEventListener('click', sendMessage);
+    userInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') sendMessage();
+    });
+    
+    langButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            langButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            currentLanguage = this.dataset.lang;
+            
+            userInput.placeholder = currentLanguage === 'hindi' ? 
+                'अपना संदेश लिखें...' : 'Type your message...';
+            
+            if (recognition) {
+                recognition.lang = currentLanguage === 'english' ? 'en-US' : 'hi-IN';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
